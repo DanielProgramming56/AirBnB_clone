@@ -36,123 +36,95 @@ class HBNBCommand(cmd.Cmd):
         except KeyError:
             print("** class doesn't exist **")
 
-    def do_show(self, arg):
-        """Prints the string representation of an instance of BaseModel, State, City, Amenity, Place, or Review"""
+    def  do_destroy(self, arg):
+        """Deletes an instance of BaseModel, State, City, Amenity, Place, Review, or User based on the class name and id"""
         if not arg:
             print("** class name missing **")
             return
 
-        args = arg.split()
-        if len(args) == 1:
-            print("** instance id missing **")
-            return
-        elif len(args) > 2:
-            print("Too many arguments for show command")
-            return
-
-        class_name = args[0].capitalize()  # Capitalize the class name
-        instance_id = args[1]
-
         try:
-            # Retrieve the instance from storage
-            obj_key = "{}.{}".format(class_name, instance_id)
-            instance = storage.all().get(obj_key)
-
-            if not instance:
-                print("** no instance found **")
-            else:
-                print(instance)
-        except KeyError:
-            print("** class doesn't exist **")
-
-    def do_destroy(self, arg):
-        """Deletes an instance of BaseModel, State, City, Amenity, Place, or Review based on the class name and id"""
-        if not arg:
-            print("** class name missing **")
-            return
-
-        args = arg.split()
-        if len(args) == 1:
-            print("** instance id missing **")
-            return
-        elif len(args) > 2:
-            print("Too many arguments for destroy command")
-            return
-
-        class_name = args[0].capitalize()  # Capitalize the class name
-        instance_id = args[1]
-
-        try:
-            # Retrieve the instance from storage
-            obj_key = "{}.{}".format(class_name, instance_id)
-            instance = storage.all().get(obj_key)
-
-            if not instance:
-                print("** no instance found **")
-            else:
-                # Delete the instance and save changes
-                del storage.all()[obj_key]
+            args = arg.split()
+            class_name = args[0].capitalize()
+            instance_id = args[1]
+            key = "{}.{}".format(class_name, instance_id)
+            instances = storage.all()
+            if key in instances:
+                del instances[key]
                 storage.save()
+            else:
+                print("** no instance found **")
+        except IndexError:
+            print("** instance id missing **")
         except KeyError:
             print("** class doesn't exist **")
 
     def do_all(self, arg):
-        """Prints string representations of all instances of BaseModel, State, City, Amenity, Place, or Review"""
+        """Prints string representations of all instances of BaseModel, State, City, Amenity, Place, Review, or User"""
         try:
-            if not arg:
-                # Print all instances if class name is not provided
-                instances = storage.all().values()
-            else:
-                # Print instances of the specified class
-                class_name = arg.capitalize()  # Capitalize the class name
-                instances = [v for k, v in storage.all().items() if k.startswith(class_name + ".")]
-
-            if not instances:
-                print("** no instance found **")
-            else:
-                for instance in instances:
-                    print(instance)
+            class_name = arg.capitalize()
+            instances = storage.all()[class_name]
+            print(instances)
         except KeyError:
             print("** class doesn't exist **")
 
     def do_update(self, arg):
-        """Updates an instance of BaseModel, State, City, Amenity, Place, or Review based on the class name and id"""
+        """Updates an instance of BaseModel, State, City, Amenity, Place, Review, or User based on the class name and id
+        with a dictionary representation (save the change into the JSON file)"""
         if not arg:
             print("** class name missing **")
             return
 
-        args = arg.split()
-        if len(args) == 1:
-            print("** instance id missing **")
-            return
-        elif len(args) == 2:
-            print("** attribute name missing **")
-            return
-        elif len(args) == 3:
-            print("** value missing **")
-            return
-        elif len(args) > 4:
-            print("Too many arguments for update command")
-            return
-
-        class_name = args[0].capitalize()  # Capitalize the class name
-        instance_id = args[1]
-        attribute_name = args[2]
-        attribute_value = args[3]
-
         try:
-            # Retrieve the instance from storage
-            obj_key = "{}.{}".format(class_name, instance_id)
-            instance = storage.all().get(obj_key)
+            args = arg.split()
+            class_name = args[0].capitalize()
+            instance_id = args[1]
+            dictionary_repr = eval(args[2])
 
-            if not instance:
-                print("** no instance found **")
+            key = "{}.{}".format(class_name, instance_id)
+            instances = storage.all()
+            if key in instances:
+                instance = instances[key]
+                for k, v in dictionary_repr.items():
+                    setattr(instance, k, v)
+                instance.save()
             else:
-                # Update the attribute and save changes
-                setattr(instance, attribute_name, attribute_value)
-                storage.save()
+                print("** no instance found **")
+        except IndexError:
+            print("** instance id missing **")
         except KeyError:
             print("** class doesn't exist **")
 
+    def do_count(self, arg):
+        """Counts the number of instances of BaseModel, State, City, Amenity, Place, Review, or User"""
+        try:
+            class_name = arg.capitalize()
+            instances = storage.all()[class_name]
+            count = len(instances)
+            print(count)
+        except KeyError:
+            print("** class doesn't exist **")
+
+    def do_show(self, arg):
+        """Prints the string representation of an instance of BaseModel, State, City, Amenity, Place, Review, or User based on the class name and id"""
+        if not arg:
+            print("** class name missing **")
+            return
+
+        try:
+            args = arg.split()
+            class_name = args[0].capitalize()
+            instance_id = args[1]
+            key = "{}.{}".format(class_name, instance_id)
+            instance = storage.all().get(key)
+            if instance:
+                print(instance)
+            else:
+                print("** no instance found **")
+        except IndexError:
+            print("** instance id missing **")
+        except KeyError:
+            print("** class doesn't exist **") 
+
+    
 if __name__ == '__main__':
     HBNBCommand().cmdloop()

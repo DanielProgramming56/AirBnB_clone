@@ -4,6 +4,7 @@ from models.base_model import BaseModel
 from models.user import User
 from models import storage
 
+
 class HBNBCommand(cmd.Cmd):
     prompt = "(hbnb) "
 
@@ -21,7 +22,9 @@ class HBNBCommand(cmd.Cmd):
         pass
 
     def do_create(self, arg):
-        """Create a new instance of BaseModel, State, City, Amenity, Place, or Review,save it, and print the id"""
+        """Create a new instance of BaseModel,
+        State, City, Amenity, Place,
+        or Review,save it, and print the id"""
 
         if not arg:
             print("** class name missing **")
@@ -36,8 +39,11 @@ class HBNBCommand(cmd.Cmd):
         except KeyError:
             print("** class doesn't exist **")
 
-    def  do_destroy(self, arg):
-        """Deletes an instance of BaseModel, State, City, Amenity, Place, Review, or User based on the class name and id"""
+    def do_destroy(self, arg):
+        """Deletes an instance of
+        BaseModel, State, City, Amenity,
+        Place, Review, or User based on
+        the class name and id"""
         if not arg:
             print("** class name missing **")
             return
@@ -59,7 +65,9 @@ class HBNBCommand(cmd.Cmd):
             print("** class doesn't exist **")
 
     def do_all(self, arg):
-        """Prints string representations of all instances of BaseModel, State, City, Amenity, Place, Review, or User"""
+        """Prints string representations
+        of all instances of BaseModel, State,
+        City, Amenity, Place, Review, or User"""
         try:
             class_name = arg.capitalize()
             instances = storage.all()[class_name]
@@ -68,8 +76,11 @@ class HBNBCommand(cmd.Cmd):
             print("** class doesn't exist **")
 
     def do_update(self, arg):
-        """Updates an instance of BaseModel, State, City, Amenity, Place, Review, or User based on the class name and id
-        with a dictionary representation (save the change into the JSON file)"""
+        """Updates an instance of BaseModel,
+        State, City, Amenity, Place, Review,
+        or User based on the class name and id
+        with a dictionary representation
+        (save the change into the JSON file)"""
         if not arg:
             print("** class name missing **")
             return
@@ -95,7 +106,9 @@ class HBNBCommand(cmd.Cmd):
             print("** class doesn't exist **")
 
     def do_count(self, arg):
-        """Counts the number of instances of BaseModel, State, City, Amenity, Place, Review, or User"""
+        """Counts the number of instances
+        of BaseModel, State, City, Amenity,
+        Place, Review, or User"""
         try:
             class_name = arg.capitalize()
             instances = storage.all()[class_name]
@@ -105,7 +118,10 @@ class HBNBCommand(cmd.Cmd):
             print("** class doesn't exist **")
 
     def do_show(self, arg):
-        """Prints the string representation of an instance of BaseModel, State, City, Amenity, Place, Review, or User based on the class name and id"""
+        """Prints the string representation
+        of an instance of BaseModel, State,
+        City, Amenity, Place, Review, or User
+        based on the class name and id"""
         if not arg:
             print("** class name missing **")
             return
@@ -123,8 +139,8 @@ class HBNBCommand(cmd.Cmd):
         except IndexError:
             print("** instance id missing **")
         except KeyError:
-            print("** class doesn't exist **") 
+            print("** class doesn't exist **")
 
-    
+
 if __name__ == '__main__':
     HBNBCommand().cmdloop()

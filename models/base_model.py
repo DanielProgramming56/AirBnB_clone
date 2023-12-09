@@ -2,10 +2,10 @@
 import uuid
 from datetime import datetime
 from models import storage
+
+
 class BaseModel:
     def __init__(self, *args, **kwargs):
-        
-
         if kwargs is not None and kwargs != {}:
             for key in kwargs:
                 if key == "created_at":
@@ -34,7 +34,5 @@ class BaseModel:
         return obj_dict
 
     def __str__(self):
-        return "[{}] ({}) {}".format(self.__class__.__name__, self.id, self.__dict__)
-
-
-print(BaseModel())
+        return "[{}] ({}) {}".format(self.__class__.__name__,
+                                     self.id, self.__dict__)

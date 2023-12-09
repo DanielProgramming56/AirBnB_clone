@@ -3,6 +3,7 @@ import json
 import os
 from models.user import User
 
+
 class FileStorage:
     __file_path = "file.json"
     __objects = {}
@@ -23,7 +24,9 @@ class FileStorage:
         if not os.path.exists(FileStorage.__file_path):
             return
 
-        with open(FileStorage.__file_path, "r", encoding="utf-8") as f:
+        with open(FileStorage.__file_path,
+                  "r", encoding="utf-8") as f:
             obj_dict = json.load(f)
-            obj_dict = {k: globals()[v["__class__"]](**v) for k, v in obj_dict.items()}
+            obj_dict = {k: globals()[v["__class__"]](**v)
+                        for k, v in obj_dict.items()}
             FileStorage.__objects = obj_dict
